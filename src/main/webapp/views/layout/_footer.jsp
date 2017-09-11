@@ -1,0 +1,62 @@
+<%@ page pageEncoding="utf-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<footer id="myFooter">
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-3 myCols">
+					<h5>Get started</h5>
+					<ul>
+						<li><a href="#">Home</a></li>
+						<li><a href="#">Sign up</a></li>
+						<li><a href="#">Downloads</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-3 myCols">
+					<h5>About us</h5>
+					<ul>
+						<li><a href="#">Company Information</a></li>
+						<li><a href="#">Contact us</a></li>
+						<li><a href="#">Reviews</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-3 myCols">
+					<h5>Support</h5>
+					<ul>
+						<li><a href="#">FAQ</a></li>
+						<li><a href="#">Help desk</a></li>
+						<li><a href="#">Forums</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-3 myCols">
+					<h5>Legal</h5>
+					<ul>
+						<li><a href="#">Terms of Service</a></li>
+						<li><a href="#">Terms of Use</a></li>
+						<li><a href="#">Privacy Policy</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="social-networks">
+			<a href="#" class="twitter"><i class="fa fa-twitter"></i></a> <a
+				href="#" class="facebook"><i class="fa fa-facebook-official"></i></a>
+			<a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+		</div>
+		<div class="footer-copyright">
+			<p>© 2016 Copyright Text</p>
+		</div>
+	</footer>
+	<script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<c:if test="${pageContext.request.requestURI == '/views/student.jsp'}">
+		<!-- Include Date Range Picker -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+		<script src="/js/student.js"></script>
+	</c:if>
+	<c:if test="${pageContext.request.requestURI == '/views/login.jsp'}">
+		<script src="/js/login.js"></script>
+	</c:if>
+</body>
+</html>

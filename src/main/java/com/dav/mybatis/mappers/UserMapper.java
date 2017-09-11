@@ -4,7 +4,18 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.dav.mybatis.domain.User;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Interface UserMapper.
+ */
 @Mapper
 public interface UserMapper {
+
+	/**
+	 * Select by username.
+	 *
+	 * @param username the username
+	 * @return the user
+	 */
 	User selectByUsername(String username);
 }

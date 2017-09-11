@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dav.mybatis.mappers.StudentMapper">
+	<cache />
+	<select id="selectAll" resultType="Student" flushCache="true">
+		SELECT
+			s.id AS id,
+			s.name AS name,
+			s.code AS code,
+			si.address AS address,
+			si.average_score AS averageScore,
+			si.date_of_birth AS dateOfBirth
+		FROM students s
+		JOIN student_infos si ON s.id = si.student_id
+		WHERE s.name LIKE #{keyword} OR s.code LIKE #{keyword} OR si.address LIKE #{keyword}
+		ORDER BY s.id DESC
+		LIMIT #{index}, 5
+	</select>
+
+	<select id="selectStudentById" resultType="Student">
+		SELECT
+			s.id AS id,
+			s.name AS name,
+			s.code AS code,
+			si.address AS address,
+			si.average_score AS averageScore,
+			si.date_of_birth AS dateOfBirth
+		FROM students s
+		JOIN student_infos si ON s.id = si.student_id
+		WHERE s.id = #{id}
+	</select>
+
+	<select id="countRecord" resultType="int">
+		SELECT COUNT(*)
+		FROM students s
+		JOIN student_infos si ON s.id = si.student_id
+		WHERE s.name LIKE #{keyword} OR s.code LIKE #{keyword} OR si.address LIKE #{keyword}
+	</select>
+
+	<insert id="insertStudent" keyColumn="id" keyProperty="id" parameterType="Student" useGeneratedKeys="true">
+		INSERT INTO students(name, code)
+		VALUES(#{name}, #{code})
+	</insert>
+
+	<insert id="insertStudentInfo" keyColumn="id" keyProperty="id" parameterType="Student" useGeneratedKeys="true">
+		INSERT INTO student_infos(address, average_score, date_of_birth, student_id)
+		VALUES(#{address}, #{averageScore}, #{dateOfBirth}, #{id})
+	</insert>
+
+	<update id="updateStudentInfo">
+		UPDATE students as s , student_infos as si
+		SET s.name = #{name}, s.code = #{code}, si.address = #{address}, si.average_score = #{averageScore}, si.date_of_birth = #{dateOfBirth}
+		WHERE s.id = #{id}
+		AND si.student_id = s.id
+	</update>
+
+	<delete id="deleteStudentInfo">
+		DELETE students, student_infos
+		FROM students
+		INNER JOIN student_infos
+		WHERE student_infos.student_id = students.id
+		AND students.id = #{id}
+	</delete>
+</mapper>

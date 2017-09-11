@@ -1,12 +1,12 @@
-package com.dav.mybatis.service;
+package com.dav.mybatis.dao;
 
 import com.dav.mybatis.domain.User;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface UserService.
+ * The Interface UserDao.
  */
-public interface UserService {
+public interface UserDao {
 
 	/**
 	 * Gets the user by username.
