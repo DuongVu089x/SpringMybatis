@@ -2,7 +2,7 @@ package com.dav.mybatis.mappers;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.dav.mybatis.domain.User;
+import com.dav.mybatis.model.User;
 
 // TODO: Auto-generated Javadoc
 /**

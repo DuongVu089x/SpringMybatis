@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.dav.mybatis.domain.Student;
+import com.dav.mybatis.model.Student;
 
 // TODO: Auto-generated Javadoc
 /**

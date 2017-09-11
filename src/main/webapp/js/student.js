@@ -115,7 +115,7 @@ function getStudentInfo(studentId) {
 
 // Show modal insert of update.
 // If currentStudentId is -1 then insert usert to DB
-// If currentStudentId is not -1 then update user 
+// If currentStudentId is not -1 then update user
 function updateOrInsertStudent() {
 	var id = currentStudentId;
 	var student = {
@@ -124,7 +124,7 @@ function updateOrInsertStudent() {
 		code : $("#code").val(),
 		address : $("#address").val(),
 		averageScore : $("#averageScore").val(),
-		dateOfBirth : $("#dateOfBirth").val()
+		dateOfBirth : $("#dateOfBirth").datepicker('getDate')
 	};
 
 	var data = JSON.stringify(student);
@@ -233,8 +233,6 @@ $(document).ready(function() {
 	updateCss();
 	getTotalPage();
 	getStudentWithPage(currentPage);
-	
-	
 });
 
 

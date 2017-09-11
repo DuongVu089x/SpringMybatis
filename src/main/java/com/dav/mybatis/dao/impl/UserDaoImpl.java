@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.dav.mybatis.dao.UserDao;
-import com.dav.mybatis.domain.User;
+import com.dav.mybatis.model.User;
 
 // TODO: Auto-generated Javadoc
 /**

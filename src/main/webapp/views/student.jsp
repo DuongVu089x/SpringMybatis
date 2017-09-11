@@ -64,7 +64,7 @@
 								<div class="form-group">
 									<label for="exampleInputEmail1">Date of birth</label> 
 									<div class="input-group">
-										<input class="form-control" id="dateOfBirth" name="dateOfBirth" placeholder="DD/MM/YYYY" type="text" />
+										<input class="form-control" id="dateOfBirth" name="dateOfBirth" placeholder="DD/MM/YYYY" type="text" readonly/>
 										<div class="input-group-addon">
 											<i class="fa fa-calendar"> </i>
 										</div>

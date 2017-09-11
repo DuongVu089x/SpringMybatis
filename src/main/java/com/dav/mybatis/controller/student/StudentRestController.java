@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dav.mybatis.domain.Student;
+import com.dav.mybatis.model.Student;
 import com.dav.mybatis.service.StudentService;
 
 // TODO: Auto-generated Javadoc

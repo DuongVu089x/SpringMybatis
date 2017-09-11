@@ -1,4 +1,4 @@
-package com.dav.mybatis.domain;
+package com.dav.mybatis.model;
 
 import java.io.Serializable;
 

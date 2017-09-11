@@ -7,25 +7,23 @@
 				<div class="col-sm-3 myCols">
 					<h5>Get started</h5>
 					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Sign up</a></li>
-						<li><a href="#">Downloads</a></li>
+						<li><a href="/student/" target="_blank">Home</a></li>
+						<li><a href="/login/" target="_blank">Sign up</a></li>
 					</ul>
 				</div>
 				<div class="col-sm-3 myCols">
 					<h5>About us</h5>
 					<ul>
-						<li><a href="#">Company Information</a></li>
-						<li><a href="#">Contact us</a></li>
+						<li><a href="https://www.facebook.com/" target="_blank">Facebook</a></li>
+						<li><a href="https://www.linkedin.com/feed/" target="_blank">Linkedin</a></li>
 						<li><a href="#">Reviews</a></li>
 					</ul>
 				</div>
 				<div class="col-sm-3 myCols">
 					<h5>Support</h5>
 					<ul>
-						<li><a href="#">FAQ</a></li>
-						<li><a href="#">Help desk</a></li>
-						<li><a href="#">Forums</a></li>
+						<li><a href="https://duongvu089x.github.io/" target="_blank">GitHub</a></li>
+						<li><a href="https://drive.google.com/open?id=0B92EmFc7biHeQ2pMSVhsNHpsRkE" target="_blank">Drive</a></li>
 					</ul>
 				</div>
 				<div class="col-sm-3 myCols">

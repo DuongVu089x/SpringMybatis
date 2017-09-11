@@ -2,7 +2,7 @@ package com.dav.mybatis.service;
 
 import java.util.List;
 
-import com.dav.mybatis.domain.Student;
+import com.dav.mybatis.model.Student;
 
 // TODO: Auto-generated Javadoc
 /**

@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<package name="com.dav.mybatis.domain" />
+		<package name="com.dav.mybatis.model" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="mappers/UserMapper.xml" />

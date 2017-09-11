@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.dav.mybatis.common.util.Constants;
 import com.dav.mybatis.dao.StudentDao;
-import com.dav.mybatis.domain.Student;
+import com.dav.mybatis.model.Student;
 import com.dav.mybatis.service.StudentService;
 
 // TODO: Auto-generated Javadoc

@@ -1,6 +1,6 @@
 package com.dav.mybatis.dao;
 
-import com.dav.mybatis.domain.User;
+import com.dav.mybatis.model.User;
 
 // TODO: Auto-generated Javadoc
 /**

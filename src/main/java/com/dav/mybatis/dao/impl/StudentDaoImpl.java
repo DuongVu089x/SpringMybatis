@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.dav.mybatis.dao.StudentDao;
-import com.dav.mybatis.domain.Student;
+import com.dav.mybatis.model.Student;
 
 // TODO: Auto-generated Javadoc
 /**

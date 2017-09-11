@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.dav.mybatis.dao.UserDao;
-import com.dav.mybatis.domain.User;
+import com.dav.mybatis.model.User;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -30,10 +30,9 @@ public class AuthenticationServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-		User userInfo;
 		UserDetails userDetails = null;
 		try {
-			userInfo = userDao.getUserByUsername(username);
+		    User userInfo = userDao.getUserByUsername(username);
 			GrantedAuthority authority = new SimpleGrantedAuthority(userInfo.getRole());
 			userDetails = (UserDetails) new org.springframework.security.core.userdetails.User(
 					userInfo.getUsername(), userInfo.getPassword(), Arrays.asList(authority));
