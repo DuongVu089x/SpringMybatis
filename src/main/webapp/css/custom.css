@@ -117,7 +117,7 @@ tbody button.btn {
 }
 
 .panel-heading {
-    padding: 5px 15px;
+	padding: 5px 15px;
 }
 
 .panel-footer {
@@ -134,59 +134,80 @@ tbody button.btn {
 	-webkit-border-radius: 50%;
 	border-radius: 50%;
 }
-#custom-search-input{
-    padding: 3px;
-    border: solid 1px #E4E4E4;
-    border-radius: 6px;
-    background-color: #fff;
+
+#custom-search-input {
+	padding: 3px;
+	border: solid 1px #E4E4E4;
+	border-radius: 6px;
+	background-color: #fff;
 }
 
-#custom-search-input input{
-    border: 0;
-    box-shadow: none;
+#custom-search-input input {
+	border: 0;
+	box-shadow: none;
 }
 
-#custom-search-input button{
-    margin: 2px 0 0 0;
-    background: none;
-    box-shadow: none;
-    border: 0;
-    color: #666666;
-    padding: 0 8px 0 10px;
-    border-left: solid 1px #ccc;
+#custom-search-input button {
+	margin: 2px 0 0 0;
+	background: none;
+	box-shadow: none;
+	border: 0;
+	color: #666666;
+	padding: 0 8px 0 10px;
+	border-left: solid 1px #ccc;
 }
 
-#custom-search-input button:hover{
-    border: 0;
-    box-shadow: none;
-    border-left: solid 1px #ccc;
+#custom-search-input button:hover {
+	border: 0;
+	box-shadow: none;
+	border-left: solid 1px #ccc;
 }
 
-#custom-search-input .glyphicon-search{
-    font-size: 23px;
+#custom-search-input .glyphicon-search {
+	font-size: 23px;
 }
+
 .error-404 {
-    margin: 0 auto;
-    text-align: center;
-    height: 500px;
+	margin: 0 auto;
+	text-align: center;
+	height: 500px;
 }
+
 .error-404 .error-code {
-  bottom: 60%;
-  color: #4686CC;
-  font-size: 96px;
-  line-height: 100px;
-  font-weight: bold;
+	bottom: 60%;
+	color: #4686CC;
+	font-size: 96px;
+	line-height: 100px;
+	font-weight: bold;
 }
+
 .error-404 .error-desc {
-  font-size: 12px;
-  color: #647788;
+	font-size: 12px;
+	color: #647788;
 }
+
 .error-404 .m-b-10 {
-  margin-bottom: 10px!important;
+	margin-bottom: 10px !important;
 }
+
 .error-404 .m-b-20 {
-  margin-bottom: 20px!important;
+	margin-bottom: 20px !important;
 }
+
 .error-404 .m-t-20 {
-  margin-top: 20px!important;
+	margin-top: 20px !important;
+}
+
+input#dateOfBirth {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
 }

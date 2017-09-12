@@ -12,12 +12,13 @@
 	<meta name="_csrf_header" content="${_csrf.headerName}"/>
 	<c:if test="${jwt!=null}">
 		<meta name="jwt" content="${jwt}" />
+		<meta name="role" content="${role}" />
 	</c:if>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="/css/custom.css" rel="stylesheet" type="text/css" />
 	<c:if test="${pageContext.request.requestURI == '/views/student.jsp'}">
-		<!--Font Awesome (added because you use icons in your prepend/append)-->
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 		<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
 	</c:if>
 </head>

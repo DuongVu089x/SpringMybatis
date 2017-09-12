@@ -46,6 +46,7 @@ public class StudentController {
 			String jwtToken = tokenHandler.createTokenForUser(role);
 			model.addAttribute("username", name);
 			model.addAttribute("jwt", jwtToken);
+			model.addAttribute("role", role);
 		}
 
 		return "student";

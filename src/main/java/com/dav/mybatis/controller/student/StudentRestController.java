@@ -72,7 +72,7 @@ public class StudentRestController {
      * @throws Exception the exception
      */
     @RequestMapping(value = "/insertStudent", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public void insertStudent(@RequestBody @Valid Student data) throws Exception {
+    public void insertStudent(@Valid @RequestBody Student data) throws Exception {
         studentService.insertStudent(data);
     }
 
@@ -84,7 +84,7 @@ public class StudentRestController {
      * @throws Exception the exception
      */
     @RequestMapping(value = "/updateStudent", method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
-    public void updateStudent(@RequestParam(required = true, defaultValue = "1", value = "id") int id, @RequestBody @Valid Student data) throws Exception {
+    public void updateStudent(@RequestParam(required = true, defaultValue = "1", value = "id") int id,@Valid @RequestBody Student data) throws Exception {
     	studentService.updateStudent(data);
 
     }

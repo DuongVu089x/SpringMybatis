@@ -1,4 +1,4 @@
-package com.dav.mybatis.config;
+package com.dav.mybatis.common.custom;
 
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;

@@ -1,6 +1,7 @@
 <%@page pageEncoding="utf-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <jsp:include page="layout/_header.jsp" />
 
@@ -11,11 +12,14 @@
 				<b>Student</b>
 			</h4>
 			<div class="row">
-				<button type="button" class="btn btn-success  col-md-1" data-toggle="modal" data-target="#modalInsertUpdate" onclick="clearForm()">Insert</button>
+				 <c:if test="${role=='ADMIN'}">
+					<button type="button" class="btn btn-success  col-md-1" data-toggle="modal" data-target="#modalInsertUpdate" onclick="clearForm()">Insert</button>		  
+				</c:if>
 				<div class="col-md-5 col-md-push-6">
 		            <div id="custom-search-input">
 		                <div class="input-group col-md-12">
-		                    <input type="text" id="search" class="form-control input-lg" placeholder="Name, Code, Address"  onkeyup="searchStudent()"/>
+			               
+							<input type="text" id="search" class="form-control input-lg" placeholder="Name, Code, Address"  onkeyup="searchStudent()"/>
 		                    <span class="input-group-btn">
 		                        <button class="btn btn-info btn-lg" type="button" onclick="searchStudent()">
 		                            <i class="glyphicon glyphicon-search"></i>
@@ -33,7 +37,9 @@
 						<th>Date of birth</th>
 						<th>Average Score</th>
 						<th>Address</th>
-						<th>Action</th>
+						<c:if test="${role=='ADMIN'}">
+							<th>Action</th>
+						</c:if>
 					</tr>
 				</thead>
 				<tbody>
@@ -63,12 +69,7 @@
 								</div>
 								<div class="form-group">
 									<label for="exampleInputEmail1">Date of birth</label> 
-									<div class="input-group">
-										<input class="form-control" id="dateOfBirth" name="dateOfBirth" placeholder="DD/MM/YYYY" type="text" readonly/>
-										<div class="input-group-addon">
-											<i class="fa fa-calendar"> </i>
-										</div>
-									</div>
+									<input id="dateOfBirth" name="dateOfBirth" placeholder="DD/MM/YYYY" type="text" readonly>
 									<div id="error-dateOfBirth" class="error-message alert alert-danger alert-hide"></div>
 								</div>
 								<div class="form-group">

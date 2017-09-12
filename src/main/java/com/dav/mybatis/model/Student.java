@@ -14,10 +14,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.dav.mybatis.common.custom.CustomDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -34,18 +34,19 @@ public class Student implements Serializable {
     private int id;
 
     /** The student name. */
-    @NotEmpty
+    @NotNull
     @Size(min = 2, max = 255)
+    @Pattern(regexp = "^[a-zA-Z\\d\\p{L}]+( [a-zA-Z\\d\\p{L}]+)*$", message = "{Pattern.student.name}")
     private String name;
 
     /** The student code. */
-    @NotEmpty
-    @Size(min = 2, max = 11)
-    @Pattern(regexp = "\\d+")
+    @NotNull
+    @Size(min = 2, max = 11, message = "{Size.student.code}")
+    @Pattern(regexp = "\\d+", message = "{Pattern.student.code}")
     private String code;
 
     /** The address. */
-    @NotEmpty
+    @NotNull
     @Size(min = 2, max = 50)
     private String address;
 
@@ -58,7 +59,7 @@ public class Student implements Serializable {
     /** The date of birth. */
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date dateOfBirth;
 
     /**

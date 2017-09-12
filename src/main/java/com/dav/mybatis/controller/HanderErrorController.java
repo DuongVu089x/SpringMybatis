@@ -16,4 +16,8 @@ public class HanderErrorController {
     public String errorPage() {
         return "404";
     }
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public String accessDenied() {
+        return "403";
+    }
 }

@@ -2,6 +2,21 @@ var currentPage = 1;
 var currentStudentId;
 var keyword = $("#search").val();
 var token = $("meta[name='jwt']").attr("content");
+var role = $("meta[name='role']").attr("content");
+
+var XML_CHAR_MAP = {
+	'<' : '&lt;',
+	'>' : '&gt;',
+	'&' : '&amp;',
+	'"' : '&quot;',
+	"'" : '&apos;'
+};
+
+function escapeXml(s) {
+	return s.replace(/[<>&"']/g, function(ch) {
+		return XML_CHAR_MAP[ch];
+	});
+}
 
 function updateCss() {
 	// Update heigh for div content student
@@ -13,16 +28,14 @@ function updateCss() {
 	}else{
 		$('.student-content').height(500);
 	}
-	// Update code config for input Date Of Birth
-	var date_input=$('input[name="dateOfBirth"]'); //our date input has the name "date"
-	var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-	date_input.datepicker({
-		format: 'dd/mm/yyyy',
-		container: container,
-		todayHighlight: true,
-		autoclose: true,
-	});
-
+	 $("#dateOfBirth").datepicker({
+		  autoSize: true,
+		  dateFormat: 'dd/mm/yy',
+		  changeMonth: true,
+		  changeYear: true,
+		  yearRange: "-50:+0"
+	 });
+	
 }
 
 // Click change page current
@@ -60,11 +73,15 @@ function getTotalPage() {
 		}
 	});
 }
-
+function formatDate(stringDate){
+	var date = new Date(stringDate);
+	return date.getDate() + '/' + (date.getMonth() + 1)  + '/' +  date.getFullYear();
+}
 // Get list student of current page
 // with response success is list Student
 // and bind to view
 function getStudentWithPage(page) {
+	
 	$.ajax({
 		url : "/api/student/getStudentWithPage?page=" + (page - 1)+"&keyword=" + keyword,
 		dataType : "json",
@@ -72,21 +89,28 @@ function getStudentWithPage(page) {
 			'Authorization' : token
 		},
 		success : function(response) {
+			 $("#dateOfBirth").datepicker({
+				  autoSize: true,
+				  dateFormat: 'dd/mm/yy'
+			 });
 			var strResult = '';
-			$.each(response,function(index, value){
+		
+			$.each(response,function(index, value) {
 				strResult += "<tr>"
-								+"<td>"+value.name+"</td>"
-								+"<td>"+value.code+"</td>"
-								+"<td>"+value.dateOfBirth+"</td>"
+								+"<td>"+escapeXml(value.name)+"</td>"
+								+"<td>"+escapeXml(value.code)+"</td>"
+								+"<td>"+formatDate(value.dateOfBirth)+"</td>"
 								+"<td>"+value.averageScore+"</td>"
-								+"<td>"+value.address+"</td>"
-								+"<td>"
-								+	"<button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalInsertUpdate' onclick='getStudentInfo(" + value.id + ")'>Update</button>"
-								+	"<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalDelete' onclick='showDeleteStudentInfo(" + value.id + ")'>Delete</button>"
-								+"</td>"
-							+"</tr>";
+								+"<td>"+escapeXml(value.address)+ "</td>";
+				if(role === 'ADMIN') {
+					strResult += "<td>"
+								 +	"<button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalInsertUpdate' onclick='getStudentInfo(" + value.id + ")'>Update</button>"
+								 +	"<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalDelete' onclick='showDeleteStudentInfo(" + value.id + ")'>Delete</button>"
+								 +"</td>";
+				}
+				strResult += "</tr>";
 			});
-			$("#data-student tbody").append(strResult);
+			$("#data-student tbody").html(strResult);
 		}
 	});
 }
@@ -105,7 +129,9 @@ function getStudentInfo(studentId) {
 			console.log(response);
 			$("#name").val(response.name);
 			$("#code").val(response.code);
-			$("#dateOfBirth").val(response.dateOfBirth);
+			$("#dateOfBirth").datepicker({
+				 dateFormat: 'dd/MM/yy'
+			}).datepicker('setDate', new Date(response.dateOfBirth));
 			$("#averageScore").val(response.averageScore);
 			$("#address").val(response.address);
 			currentStudentId = response.id;
@@ -117,6 +143,11 @@ function getStudentInfo(studentId) {
 // If currentStudentId is -1 then insert usert to DB
 // If currentStudentId is not -1 then update user
 function updateOrInsertStudent() {
+	$('.error-message').each(function( index ) {
+		$(this).empty();
+		$(this).addClass('alert-hide');
+	});
+	
 	var id = currentStudentId;
 	var student = {
 		id : currentStudentId,
@@ -124,7 +155,7 @@ function updateOrInsertStudent() {
 		code : $("#code").val(),
 		address : $("#address").val(),
 		averageScore : $("#averageScore").val(),
-		dateOfBirth : $("#dateOfBirth").datepicker('getDate')
+		dateOfBirth :  $("#dateOfBirth").datepicker({ dateFormat: "dd/MM/yy" }).val()
 	};
 
 	var data = JSON.stringify(student);
@@ -155,7 +186,12 @@ function updateStudent(id, data) {
 			getStudentWithPage(currentPage);
 		},
 		error : function(xhr, status, error) {
-			addErrorMessage(xhr.responseJSON.errors);
+			console.log(xhr.responseJSON);
+			if(xhr.responseJSON.errors.length > 0){
+				addErrorMessage(xhr.responseJSON.errors);
+			}else{
+				console.log(xhr.responseJSON.error);
+			}
 		}
 	});
 }
@@ -180,7 +216,13 @@ function insertStudent(data) {
 			getTotalPage();
 		},
 		error : function(xhr, status, error) {
-			addErrorMessage(xhr.responseJSON.errors);
+			if(xhr.responseJSON.errors.length > 0){
+				addErrorMessage(xhr.responseJSON.errors);
+			}else{
+				console.log(xhr.responseJSON.error);
+			}
+			
+			
 		}
 	});
 }
