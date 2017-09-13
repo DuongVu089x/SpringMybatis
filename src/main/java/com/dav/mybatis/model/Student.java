@@ -11,6 +11,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -48,6 +49,7 @@ public class Student implements Serializable {
     /** The address. */
     @NotNull
     @Size(min = 2, max = 50)
+    @Pattern(regexp = "^[a-zA-Z\\d,.\\p{L}]+( [a-zA-Z\\d,.\\p{L}]+)*$", message = "{Pattern.student.address}")
     private String address;
 
     /** The average score. */
@@ -57,6 +59,7 @@ public class Student implements Serializable {
     private Double averageScore;
 
     /** The date of birth. */
+    @Past
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @JsonDeserialize(using = CustomDateDeserializer.class)

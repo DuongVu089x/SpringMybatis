@@ -1,8 +1,12 @@
 var currentPage = 1;
 var currentStudentId;
+var patternDate = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+var patternNumber = /^[0-9]*$/;
 var keyword = $("#search").val();
 var token = $("meta[name='jwt']").attr("content");
 var role = $("meta[name='role']").attr("content");
+var accessDate = new Date();
+accessDate.setDate(accessDate.getDate() - 365);
 
 var XML_CHAR_MAP = {
 	'<' : '&lt;',
@@ -73,17 +77,27 @@ function getTotalPage() {
 		}
 	});
 }
+// Format date with pattern dd/mm/yyyy
 function formatDate(stringDate){
 	var date = new Date(stringDate);
 	return date.getDate() + '/' + (date.getMonth() + 1)  + '/' +  date.getFullYear();
 }
+
+// Format length of text
+function formatLength(stringData){
+	if(stringData.length > 25){
+		return stringData.substring(0, 25) + '...';
+	}
+	return stringData;
+}
+
 // Get list student of current page
 // with response success is list Student
 // and bind to view
 function getStudentWithPage(page) {
 
 	$.ajax({
-		url : "/api/student/getStudentWithPage?page=" + (page - 1)+"&keyword=" + keyword,
+		url : "/api/student/getStudentWithPage?page=" + (page - 1) +"&keyword=" + keyword,
 		dataType : "json",
 		headers : {
 			'Authorization' : token
@@ -94,14 +108,13 @@ function getStudentWithPage(page) {
 				  dateFormat: 'dd/mm/yy'
 			 });
 			var strResult = '';
-
 			$.each(response,function(index, value) {
 				strResult += "<tr>"
-								+"<td>"+escapeXml(value.name)+"</td>"
+								+"<td>"+formatLength(escapeXml(value.name))+"</td>"
 								+"<td>"+escapeXml(value.code)+"</td>"
 								+"<td>"+formatDate(value.dateOfBirth)+"</td>"
 								+"<td>"+value.averageScore+"</td>"
-								+"<td>"+escapeXml(value.address)+ "</td>";
+								+"<td>"+formatLength(escapeXml(value.address))+ "</td>";
 				if(role === 'ADMIN') {
 					strResult += "<td>"
 								 +	"<button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalInsertUpdate' onclick='getStudentInfo(" + value.id + ")'>Update</button>"
@@ -115,6 +128,7 @@ function getStudentWithPage(page) {
 	});
 }
 
+// Show modal insert of update.
 // Get student info with parameter is user id
 // and response is detail of user have id is parameter id
 function getStudentInfo(studentId) {
@@ -139,7 +153,6 @@ function getStudentInfo(studentId) {
 	});
 }
 
-// Show modal insert of update.
 // If currentStudentId is -1 then insert usert to DB
 // If currentStudentId is not -1 then update user
 function updateOrInsertStudent() {
@@ -168,11 +181,14 @@ function updateOrInsertStudent() {
 	}
 }
 
+// Show message error to form #modalInsertUpdate
 function showMessage(field, message){
 	$("#error-"+field).append("<p>"+message+"</p>");
 	$("#error-"+field).removeClass("alert-hide");
 }
 
+// Check vaild object student if success then send request to server
+// If get error message then show it to form #modalInsertUpdate
 function checkValidStudent(student){
 	$('.error-message').each(function( index ) {
 		$(this).empty();
@@ -183,7 +199,7 @@ function checkValidStudent(student){
 		showMessage("name","Name of student must be between 2 to 255");
 		flag = false;
 	}
-	if(student.code.trim().length < 2 || student.code.trim().length > 11 || !(/^[0-9]*$/.test(student.code))){
+	if(student.code.trim().length < 2 || student.code.trim().length > 11 || !(patternNumber.test(student.code))){
 		showMessage("code","Code of student must be between 2 and 11 and only should containt number");
 		flag = false;
 	}
@@ -195,8 +211,10 @@ function checkValidStudent(student){
 		showMessage("averageScore","Average Score of student must be between 0.0 and 10.0");
 		flag = false;
 	}
-	if(!(/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/).test(student.dateOfBirth)){
-		showMessage("dateOfBirth","Date not valid. Please enter date with pattern= dd/mm/yyyy");
+	var dateParts = student.dateOfBirth.split("/");
+	dateChoose = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+	if(!patternDate.test(student.dateOfBirth) || dateChoose.getTime() >= accessDate.getTime()){
+		showMessage("dateOfBirth","Please enter date with pattern = dd/mm/yyyy and day must be smaller than present one year");
 		flag = false;
 	}
 	return flag;
@@ -256,8 +274,6 @@ function insertStudent(data) {
 			}else{
 				console.log(xhr.responseJSON.error);
 			}
-
-
 		}
 	});
 }

@@ -65,7 +65,6 @@ public class JwtFilter extends GenericFilterBean {
 			return;
 		}
 		chain.doFilter(req, res);
-
 	}
 
 	/**

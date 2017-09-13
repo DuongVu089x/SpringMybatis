@@ -6,6 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import com.dav.mybatis.config.JwtFilter;
 
@@ -16,6 +17,7 @@ import com.dav.mybatis.config.JwtFilter;
  */
 @SuppressWarnings("deprecation")
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class SpringMybatisApplication extends SpringBootServletInitializer {
 
     /**
