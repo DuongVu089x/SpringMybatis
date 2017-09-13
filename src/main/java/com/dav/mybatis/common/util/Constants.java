@@ -15,10 +15,21 @@ public class Constants {
     /** The Constant CONST_NUM_5. */
     public static final int CONST_NUM_5 = 5;
 
+    /** The Constant STR_HEADER_AUTHORIZATION. */
     public static final String STR_HEADER_AUTHORIZATION = "authorization";
 
-    public static final String STR_UNAUTHORIZED = "Chưa đăng nhập";
+    /** The Constant STR_UNAUTHORIZED. */
+    public static final String STR_UNAUTHORIZED = "You are not logged in";
 
-    public static final String STR_FORBIDDEN = "Không có quyền truy cập";
+    /** The Constant STR_FORBIDDEN. */
+    public static final String STR_FORBIDDEN = "You don't have permission to access";
 
+    /** The Constant STR_PATH_NOT_FOUND. */
+    public static final String STR_PATH_NOT_FOUND = "/404";
+
+    /** The Constant STR_PATH_INTERNAL_SERVER_ERROR. */
+    public static final String STR_PATH_INTERNAL_SERVER_ERROR = "/500";
+
+    /** The Constant STR_FORMAT_DATE. */
+    public static final String STR_FORMAT_DATE = "dd/MM/yyyy";
 }

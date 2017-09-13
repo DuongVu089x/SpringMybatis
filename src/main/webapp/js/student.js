@@ -35,7 +35,7 @@ function updateCss() {
 		  changeYear: true,
 		  yearRange: "-50:+0"
 	 });
-	
+
 }
 
 // Click change page current
@@ -81,7 +81,7 @@ function formatDate(stringDate){
 // with response success is list Student
 // and bind to view
 function getStudentWithPage(page) {
-	
+
 	$.ajax({
 		url : "/api/student/getStudentWithPage?page=" + (page - 1)+"&keyword=" + keyword,
 		dataType : "json",
@@ -94,7 +94,7 @@ function getStudentWithPage(page) {
 				  dateFormat: 'dd/mm/yy'
 			 });
 			var strResult = '';
-		
+
 			$.each(response,function(index, value) {
 				strResult += "<tr>"
 								+"<td>"+escapeXml(value.name)+"</td>"
@@ -147,7 +147,7 @@ function updateOrInsertStudent() {
 		$(this).empty();
 		$(this).addClass('alert-hide');
 	});
-	
+
 	var id = currentStudentId;
 	var student = {
 		id : currentStudentId,
@@ -158,13 +158,48 @@ function updateOrInsertStudent() {
 		dateOfBirth :  $("#dateOfBirth").datepicker({ dateFormat: "dd/MM/yy" }).val()
 	};
 
-	var data = JSON.stringify(student);
-	if (currentStudentId != -1) {
-		updateStudent(currentStudentId, data);
-	} else {
-		insertStudent(data);
+	if (checkValidStudent(student)) {
+		var data = JSON.stringify(student);
+		if (currentStudentId != -1) {
+			updateStudent(currentStudentId, data);
+		} else {
+			insertStudent(data);
+		}
 	}
+}
 
+function showMessage(field, message){
+	$("#error-"+field).append("<p>"+message+"</p>");
+	$("#error-"+field).removeClass("alert-hide");
+}
+
+function checkValidStudent(student){
+	$('.error-message').each(function( index ) {
+		$(this).empty();
+		$(this).addClass('alert-hide');
+	});
+	var flag = true;
+	if(student.name.trim().length < 2 || student.name.trim().length > 255){
+		showMessage("name","Name of student must be between 2 to 255");
+		flag = false;
+	}
+	if(student.code.trim().length < 2 || student.code.trim().length > 11 || !(/^[0-9]*$/.test(student.code))){
+		showMessage("code","Code of student must be between 2 and 11 and only should containt number");
+		flag = false;
+	}
+	if(student.address.trim().length < 2 || student.address.trim().length > 50){
+		showMessage("address","Address of student must be between 2 and 50");
+		flag = false;
+	}
+	if(student.averageScore === "" || student.averageScore< 0.0 || student.averageScore > 10.0){
+		showMessage("averageScore","Average Score of student must be between 0.0 and 10.0");
+		flag = false;
+	}
+	if(!(/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/).test(student.dateOfBirth)){
+		showMessage("dateOfBirth","Date not valid. Please enter date with pattern= dd/mm/yyyy");
+		flag = false;
+	}
+	return flag;
 }
 
 // Update user info
@@ -187,7 +222,7 @@ function updateStudent(id, data) {
 		},
 		error : function(xhr, status, error) {
 			console.log(xhr.responseJSON);
-			if(xhr.responseJSON.errors.length > 0){
+			if(typeof xhr.responseJSON.errors !== "undefined" && xhr.responseJSON.errors.length > 0){
 				addErrorMessage(xhr.responseJSON.errors);
 			}else{
 				console.log(xhr.responseJSON.error);
@@ -221,8 +256,8 @@ function insertStudent(data) {
 			}else{
 				console.log(xhr.responseJSON.error);
 			}
-			
-			
+
+
 		}
 	});
 }

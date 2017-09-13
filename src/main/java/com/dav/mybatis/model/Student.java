@@ -51,7 +51,7 @@ public class Student implements Serializable {
     private String address;
 
     /** The average score. */
-    @NotNull
+    @NotNull(message = "{NotNull.student.averageScore}")
     @DecimalMin("0.0")
     @DecimalMax("10.0")
     private Double averageScore;

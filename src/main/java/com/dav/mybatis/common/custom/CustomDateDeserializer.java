@@ -5,15 +5,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.dav.mybatis.common.util.Constants;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CustomDateDeserializer.
+ */
 public class CustomDateDeserializer extends JsonDeserializer<Date> {
-	
+
+	/* (non-Javadoc)
+	 * @see com.fasterxml.jackson.databind.JsonDeserializer#deserialize(com.fasterxml.jackson.core.JsonParser, com.fasterxml.jackson.databind.DeserializationContext)
+	 */
 	@Override
 	public Date deserialize(JsonParser jsonparser, DeserializationContext deserializationcontext) throws IOException {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat format = new SimpleDateFormat(Constants.STR_FORMAT_DATE);
 		String date = jsonparser.getText();
 		try {
 			return format.parse(date);
