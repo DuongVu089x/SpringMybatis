@@ -18,4 +18,6 @@ public interface UserMapper {
 	 * @return the user
 	 */
 	User selectByUsername(String username);
+
+	void insertUser(User user);
 }

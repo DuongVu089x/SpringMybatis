@@ -7,4 +7,10 @@
 	<select id="selectByUsername" resultType="User" flushCache="true">
 		SELECT * FROM user WHERE user.username LIKE #{username}
 	</select>
+
+
+	<insert id="insertUser" keyColumn="id" keyProperty="id" parameterType="User" useGeneratedKeys="true">
+		INSERT INTO user(username, password, role)
+		VALUES(#{username}, #{password}, #{role})
+	</insert>
 </mapper>

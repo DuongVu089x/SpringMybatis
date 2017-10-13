@@ -15,26 +15,31 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 public class User implements Serializable {
 
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = 11234213L;
+    /** The Constant serialVersionUID. */
+    private static final long serialVersionUID = 11234213L;
 
-	/** The id. */
-	@Id
+    /** The id. */
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    private Integer id;
 
-	/** The username. */
-	@NotEmpty
-    @Size(min=2,max=20)
-	private String username;
+    /** The username. */
+    @NotEmpty
+    @Size(min = 2, max = 20)
+    private String username;
 
-	/** The password. */
-	@NotEmpty
-    @Size(min=2,max=50)
-	private String password;
+    /** The password. */
+    @NotEmpty
+    @Size(min = 2, max = 50)
+    private String password;
 
-	/** The role. */
-	private String role;
+    /** The password confirm. */
+    @NotEmpty
+    @Size(min = 2, max = 50)
+    private String passwordConfirm;
+
+    /** The role. */
+    private String role;
 
     /**
      * Gets the id.
@@ -42,60 +47,78 @@ public class User implements Serializable {
      * @return the id
      */
     public Integer getId() {
-		return id;
-	}
+        return id;
+    }
 
-	/**
-	 * Sets the id.
-	 *
-	 * @param id the new id
-	 */
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    /**
+     * Sets the id.
+     *
+     * @param id the new id
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	/**
-	 * Gets the username.
-	 *
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
+    /**
+     * Gets the username.
+     *
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
 
-	/**
-	 * Sets the username.
-	 *
-	 * @param username the new username
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    /**
+     * Sets the username.
+     *
+     * @param username the new username
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	/**
-	 * Gets the password.
-	 *
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
+    /**
+     * Gets the password.
+     *
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * Sets the password.
-	 *
-	 * @param password the new password
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    /**
+     * Sets the password.
+     *
+     * @param password the new password
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	/**
-	 * Gets the role.
-	 *
-	 * @return the role
-	 */
-	public String getRole() {
+    /**
+     * Gets the password confirm.
+     *
+     * @return the password confirm
+     */
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    /**
+     * Sets the password confirm.
+     *
+     * @param passwordConfirm the new password confirm
+     */
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    /**
+     * Gets the role.
+     *
+     * @return the role
+     */
+    public String getRole() {
         return role;
     }
 
@@ -108,12 +131,14 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see java.lang.Object#toString()
      */
     @Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return getId() + "," + getUsername() + "," + getPassword();
-	}
+    public String toString() {
+        // TODO Auto-generated method stub
+        return getId() + "," + getUsername() + "," + getPassword();
+    }
 }

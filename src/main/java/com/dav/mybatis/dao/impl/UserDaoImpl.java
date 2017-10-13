@@ -39,4 +39,22 @@ public class UserDaoImpl implements UserDao {
 		return user;
 	}
 
+    @Override
+    public void save(User user) throws Exception {
+        SqlSession sqlSession = null;
+        try {
+            sqlSession = sqlSessionFactory.openSession();
+            sqlSession.insert("insertUser", user);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            throw e;
+        } finally {
+            if (sqlSession != null) {
+                sqlSession.close();
+            }
+        }
+
+    }
+
 }

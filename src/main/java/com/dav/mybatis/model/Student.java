@@ -1,6 +1,7 @@
 package com.dav.mybatis.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.GeneratedValue;
@@ -56,7 +57,7 @@ public class Student implements Serializable {
     @NotNull(message = "{NotNull.student.averageScore}")
     @DecimalMin("0.0")
     @DecimalMax("10.0")
-    private Double averageScore;
+    private BigDecimal averageScore;
 
     /** The date of birth. */
     @Past
@@ -142,7 +143,7 @@ public class Student implements Serializable {
      *
      * @return the average score
      */
-    public Double getAverageScore() {
+    public BigDecimal getAverageScore() {
         return averageScore;
     }
 
@@ -151,7 +152,7 @@ public class Student implements Serializable {
      *
      * @param averageScore the new average score
      */
-    public void setAverageScore(Double averageScore) {
+    public void setAverageScore(BigDecimal averageScore) {
         this.averageScore = averageScore;
     }
 

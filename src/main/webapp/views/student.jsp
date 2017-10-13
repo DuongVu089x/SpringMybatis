@@ -5,6 +5,7 @@
 
 <jsp:include page="layout/_header.jsp" />
 
+<img id="loading" src="images/loading.gif" alt="Smiley face">
 <div class="student-content">
 	<div class="container">
 		<div class="row">
@@ -18,7 +19,6 @@
 				<div class="col-md-5 col-md-push-6">
 		            <div id="custom-search-input">
 		                <div class="input-group col-md-12">
-			               
 							<input type="text" id="search" class="form-control input-lg" placeholder="Name, Code, Address"  onkeyup="searchStudent()"/>
 		                    <span class="input-group-btn">
 		                        <button class="btn btn-info btn-lg" type="button" onclick="searchStudent()">
@@ -29,22 +29,25 @@
 		            </div>
 		        </div>
 			</div>
-			<table id="data-student" class="table table-hover">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Code</th>
-						<th>Date of birth</th>
-						<th>Average Score</th>
-						<th>Address</th>
-						<c:if test="${role=='ADMIN'}">
-							<th>Action</th>
-						</c:if>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
+			<div class="div-table">
+				<table id="data-student" class="table table-hover">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Code</th>
+							<th>Date of birth</th>
+							<th>Average Score</th>
+							<th>Address</th>
+							<c:if test="${role=='ADMIN'}">
+								<th>Action</th>
+							</c:if>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			
 			<ul class="pagination col-sm-4 col-sm-push-4">
 			</ul>
 			<!-- Modal Update-->

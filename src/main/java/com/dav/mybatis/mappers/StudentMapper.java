@@ -14,7 +14,14 @@ import com.dav.mybatis.model.Student;
 @Mapper
 public interface StudentMapper {
 
-  
+
+    /**
+     * Gets the all.
+     *
+     * @param index the index
+     * @param keyword the keyword
+     * @return the all
+     */
     List<Student> getAll(@Param("index") String index,  @Param("keyword") String keyword);
 
     /**
@@ -28,6 +35,7 @@ public interface StudentMapper {
     /**
      * Count record.
      *
+     * @param keyword the keyword
      * @return the int
      */
     int countRecord(String keyword);
@@ -47,6 +55,12 @@ public interface StudentMapper {
      * @return the int
      */
     int deleteStudentInfo(int id);
-    
+
+    /**
+     * Insert student info.
+     *
+     * @param student the student
+     * @return the int
+     */
     int insertStudentInfo(Student student);
 }

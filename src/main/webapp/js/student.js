@@ -2,6 +2,7 @@ var currentPage = 1;
 var currentStudentId;
 var patternDate = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
 var patternNumber = /^[0-9]*$/;
+
 var keyword = $("#search").val();
 var token = $("meta[name='jwt']").attr("content");
 var role = $("meta[name='role']").attr("content");
@@ -9,15 +10,15 @@ var accessDate = new Date();
 accessDate.setDate(accessDate.getDate() - 365);
 
 var XML_CHAR_MAP = {
-	'<' : '&lt;',
-	'>' : '&gt;',
-	'&' : '&amp;',
-	'"' : '&quot;',
-	"'" : '&apos;'
+	'<': '&lt;',
+	'>': '&gt;',
+	'&': '&amp;',
+	'"': '&quot;',
+	"'": '&apos;'
 };
 
 function escapeXml(s) {
-	return s.replace(/[<>&"']/g, function(ch) {
+	return s.replace(/[<>&"']/g, function (ch) {
 		return XML_CHAR_MAP[ch];
 	});
 }
@@ -27,65 +28,84 @@ function updateCss() {
 	const height = $(document).height();
 	const heightHeader = $('.header').height();
 	const heightFooter = $('#myFooter').height();
-	if((height - heightHeader - heightFooter)>500){
+	if ((height - heightHeader - heightFooter) > 500) {
 		$('.student-content').height(height - heightHeader - heightFooter);
-	}else{
+	} else {
 		$('.student-content').height(500);
 	}
-	 $("#dateOfBirth").datepicker({
-		  autoSize: true,
-		  dateFormat: 'dd/mm/yy',
-		  changeMonth: true,
-		  changeYear: true,
-		  yearRange: "-50:+0"
-	 });
+	$("#dateOfBirth").datepicker({
+		autoSize: true,
+		dateFormat: 'dd/mm/yy',
+		changeMonth: true,
+		changeYear: true,
+		yearRange: "-50:+0"
+	});
 
 }
 
 // Click change page current
 function changePage(index, event) {
-	$("#data-student tbody").html("");
-	getStudentWithPage(index);
-	currentPage = index;
+	if (currentPage !== index) {
+		$("#data-student tbody").html("");
+		currentPage = index;
+		getStudentWithPage(index);
+	}
 	event.preventDefault();
 }
 
 // Search student with value in input#search
 // student match if name, code or address containt value
-function searchStudent(){
+function searchStudent() {
+	clearTimeout($(this).data("timer"));
 	keyword = $("#search").val();
-	$("#data-student tbody").html("");
-	getStudentWithPage(currentPage);
-	getTotalPage();
+	if (keyword.length >= 0) {
+		$("img#loading").addClass("active");
+		$(this).data("timer", setTimeout(function () {
+			$("#data-student tbody").html("");
+			getStudentWithPage(currentPage);
+			getTotalPage();
+			$("img#loading").removeClass("active");
+		}, 1000));
+	}
 }
 
 // Get total page with reponse is total student / 5
-function getTotalPage() {
+function getTotalPage(page) {
+	result = false;
 	$(".pagination").html("");
 	$.ajax({
-		url : "/api/student/getTotalPage?keyword=" + keyword,
-		dataType : "json",
-		headers : {
-			'Authorization' : token
+		url: "/api/student/getTotalPage?keyword=" + keyword,
+		dataType: "json",
+		headers: {
+			'Authorization': token
 		},
-		success : function(response) {
+		async: false,
+		success: function (response) {
 			var strResult = '';
 			for (var i = 0; i < response; i++) {
-				strResult += "<li><a href='#' onclick='changePage("+ ( i + 1 ) +",event)'>" + (i + 1) + "</a></li>";
+				var strClass = '';
+				if (i === page) {
+					strClass = 'active';
+				}
+				strResult += "<li class=" + strClass + "><a href='#' onclick='changePage(" + (i + 1) + ",event)'>" + (i + 1) + "</a></li>";
 			}
 			$(".pagination").append(strResult);
+			if (response > 0) {
+				result = true;
+			}
 		}
 	});
+	return result;
 }
 // Format date with pattern dd/mm/yyyy
-function formatDate(stringDate){
+function formatDate(stringDate) {
 	var date = new Date(stringDate);
-	return date.getDate() + '/' + (date.getMonth() + 1)  + '/' +  date.getFullYear();
+	return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 }
 
 // Format length of text
-function formatLength(stringData){
-	if(stringData.length > 25){
+function formatLength(stringData) {
+	if (stringData.length > 25) {
 		return stringData.substring(0, 25) + '...';
 	}
 	return stringData;
@@ -95,35 +115,48 @@ function formatLength(stringData){
 // with response success is list Student
 // and bind to view
 function getStudentWithPage(page) {
-
 	$.ajax({
-		url : "/api/student/getStudentWithPage?page=" + (page - 1) +"&keyword=" + keyword,
-		dataType : "json",
-		headers : {
-			'Authorization' : token
+		url: "/api/student/getStudentWithPage?page=" + (page - 1) + "&keyword=" + keyword,
+		dataType: "json",
+		headers: {
+			'Authorization': token
 		},
-		success : function(response) {
-			 $("#dateOfBirth").datepicker({
-				  autoSize: true,
-				  dateFormat: 'dd/mm/yy'
-			 });
-			var strResult = '';
-			$.each(response,function(index, value) {
-				strResult += "<tr>"
-								+"<td>"+formatLength(escapeXml(value.name))+"</td>"
-								+"<td>"+escapeXml(value.code)+"</td>"
-								+"<td>"+formatDate(value.dateOfBirth)+"</td>"
-								+"<td>"+value.averageScore+"</td>"
-								+"<td>"+formatLength(escapeXml(value.address))+ "</td>";
-				if(role === 'ADMIN') {
-					strResult += "<td>"
-								 +	"<button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalInsertUpdate' onclick='getStudentInfo(" + value.id + ")'>Update</button>"
-								 +	"<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalDelete' onclick='showDeleteStudentInfo(" + value.id + ")'>Delete</button>"
-								 +"</td>";
-				}
-				strResult += "</tr>";
-			});
-			$("#data-student tbody").html(strResult);
+		success: function (response) {
+			if (response.length === 0 && page != 1) {
+				getStudentWithPage(--page);
+			} else {
+				$("#dateOfBirth").datepicker({
+					autoSize: true,
+					dateFormat: 'dd/mm/yy'
+				});
+				var strResult = '';
+				$.each(response, function (index, value) {
+					strResult += "<tr>" +
+						"<td>" + formatLength(escapeXml(value.name)) + "</td>" +
+						"<td>" + escapeXml(value.code) + "</td>" +
+						"<td>" + formatDate(value.dateOfBirth) + "</td>" +
+						"<td>" + value.averageScore + "</td>" +
+						"<td>" + formatLength(escapeXml(value.address)) + "</td>";
+					if (role === 'ADMIN') {
+						strResult += "<td>" +
+							"<button type='button' class='btn btn-success' data-toggle='modal' data-target='#modalInsertUpdate' onclick='getStudentInfo(" + value.id + ")'>Update</button>" +
+							"<button type='button' class='btn btn-danger' data-toggle='modal' data-target='#modalDelete' onclick='showDeleteStudentInfo(" + value.id + ")'>Delete</button>" +
+							"</td>";
+					}
+					strResult += "</tr>";
+				});
+				$("#data-student tbody").html(strResult);
+				changePageActive(page - 1);
+			}
+		}
+	});
+}
+
+function changePageActive(index) {
+	$('.pagination li').each(function (i) {
+		$(this).removeClass('active');
+		if (i === index) {
+			$(this).addClass('active');
 		}
 	});
 }
@@ -134,17 +167,17 @@ function getStudentWithPage(page) {
 function getStudentInfo(studentId) {
 	clearForm();
 	$.ajax({
-		url : "/api/student/getStudentInfo?id="+studentId,
-		dataType:"json",
-		headers : {
-			'Authorization' : token
+		url: "/api/student/getStudentInfo?id=" + studentId,
+		dataType: "json",
+		headers: {
+			'Authorization': token
 		},
-		success: function(response){
+		success: function (response) {
 			console.log(response);
 			$("#name").val(response.name);
 			$("#code").val(response.code);
 			$("#dateOfBirth").datepicker({
-				 dateFormat: 'dd/MM/yy'
+				dateFormat: 'dd/MM/yy'
 			}).datepicker('setDate', new Date(response.dateOfBirth));
 			$("#averageScore").val(response.averageScore);
 			$("#address").val(response.address);
@@ -156,19 +189,21 @@ function getStudentInfo(studentId) {
 // If currentStudentId is -1 then insert usert to DB
 // If currentStudentId is not -1 then update user
 function updateOrInsertStudent() {
-	$('.error-message').each(function( index ) {
+	$('.error-message').each(function (index) {
 		$(this).empty();
 		$(this).addClass('alert-hide');
 	});
 
 	var id = currentStudentId;
 	var student = {
-		id : currentStudentId,
-		name : $("#name").val(),
-		code : $("#code").val(),
-		address : $("#address").val(),
-		averageScore : $("#averageScore").val(),
-		dateOfBirth :  $("#dateOfBirth").datepicker({ dateFormat: "dd/MM/yy" }).val()
+		id: currentStudentId,
+		name: $("#name").val(),
+		code: $("#code").val(),
+		address: $("#address").val(),
+		averageScore: $("#averageScore").val(),
+		dateOfBirth: $("#dateOfBirth").datepicker({
+			dateFormat: "dd/MM/yy"
+		}).val()
 	};
 
 	if (checkValidStudent(student)) {
@@ -182,39 +217,48 @@ function updateOrInsertStudent() {
 }
 
 // Show message error to form #modalInsertUpdate
-function showMessage(field, message){
-	$("#error-"+field).append("<p>"+message+"</p>");
-	$("#error-"+field).removeClass("alert-hide");
+function showMessage(field, message) {
+	$("#error-" + field).append("<p>" + message + "</p>");
+	$("#error-" + field).removeClass("alert-hide");
+}
+
+function checkLengthFloat(bigDecimal) {
+	var arrNum = bigDecimal.split(".");
+	var length = arrNum.length;
+	if (length > 1 && arrNum[1].length > 10) {
+		return false;
+	}
+	return true
 }
 
 // Check vaild object student if success then send request to server
 // If get error message then show it to form #modalInsertUpdate
-function checkValidStudent(student){
-	$('.error-message').each(function( index ) {
+function checkValidStudent(student) {
+	$('.error-message').each(function (index) {
 		$(this).empty();
 		$(this).addClass('alert-hide');
 	});
 	var flag = true;
-	if(student.name.trim().length < 2 || student.name.trim().length > 255){
-		showMessage("name","Name of student must be between 2 to 255");
+	if (student.name.trim().length < 2 || student.name.trim().length > 255) {
+		showMessage("name", "Name of student must be from 2 to 255 char");
 		flag = false;
 	}
-	if(student.code.trim().length < 2 || student.code.trim().length > 11 || !(patternNumber.test(student.code))){
-		showMessage("code","Code of student must be between 2 and 11 and only should containt number");
+	if (student.code.trim().length < 2 || student.code.trim().length > 11 || !(patternNumber.test(student.code))) {
+		showMessage("code", "Code of student must be from 2 to 11 char and only should containt number");
 		flag = false;
 	}
-	if(student.address.trim().length < 2 || student.address.trim().length > 50){
-		showMessage("address","Address of student must be between 2 and 50");
+	if (student.address.trim().length < 2 || student.address.trim().length > 50) {
+		showMessage("address", "Address of student must be from 2 to 50 char");
 		flag = false;
 	}
-	if(student.averageScore === "" || student.averageScore< 0.0 || student.averageScore > 10.0){
-		showMessage("averageScore","Average Score of student must be between 0.0 and 10.0");
+	if (student.averageScore === "" || student.averageScore < 0.0 || student.averageScore > 10.0 || !(checkLengthFloat(student.averageScore))) {
+		showMessage("averageScore", "Average Score of student must be from 0.0 to 10.0 char and the part after '.' must be from 0 to 10 char");
 		flag = false;
 	}
 	var dateParts = student.dateOfBirth.split("/");
 	dateChoose = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
-	if(!patternDate.test(student.dateOfBirth) || dateChoose.getTime() >= accessDate.getTime()){
-		showMessage("dateOfBirth","Please enter date with pattern = dd/mm/yyyy and day must be smaller than present one year");
+	if (!patternDate.test(student.dateOfBirth) || dateChoose.getTime() >= accessDate.getTime()) {
+		showMessage("dateOfBirth", "Please enter date with pattern = dd/mm/yyyy and day must be smaller than present one year");
 		flag = false;
 	}
 	return flag;
@@ -225,24 +269,24 @@ function checkValidStudent(student){
 // If error, detail of error will show in modal
 function updateStudent(id, data) {
 	$.ajax({
-		type : "POST",
-		url : "/api/student/updateStudent?id=" + id,
-		headers : {
-			'Authorization' : token,
-			'Accept' : 'application/json',
-			'Content-Type' : 'application/json'
+		type: "POST",
+		url: "/api/student/updateStudent?id=" + id,
+		headers: {
+			'Authorization': token,
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
 		},
-		data : data,
-		success : function(reponse) {
+		data: data,
+		success: function (reponse) {
 			$("#data-student tbody").html("");
 			$('#modalInsertUpdate').modal('hide');
 			getStudentWithPage(currentPage);
 		},
-		error : function(xhr, status, error) {
+		error: function (xhr, status, error) {
 			console.log(xhr.responseJSON);
-			if(typeof xhr.responseJSON.errors !== "undefined" && xhr.responseJSON.errors.length > 0){
+			if (typeof xhr.responseJSON.errors !== "undefined" && xhr.responseJSON.errors.length > 0) {
 				addErrorMessage(xhr.responseJSON.errors);
-			}else{
+			} else {
 				console.log(xhr.responseJSON.error);
 			}
 		}
@@ -254,24 +298,24 @@ function updateStudent(id, data) {
 // If error, detail of error will show in modal
 function insertStudent(data) {
 	$.ajax({
-		type : "POST",
-		url : "/api/student/insertStudent",
-		headers : {
-			'Authorization' : token,
-			'Accept' : 'application/json',
-			'Content-Type' : 'application/json'
+		type: "POST",
+		url: "/api/student/insertStudent",
+		headers: {
+			'Authorization': token,
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
 		},
-		data : data,
-		success : function(reponse) {
+		data: data,
+		success: function (reponse) {
 			$("#data-student tbody").html("");
 			$('#modalInsertUpdate').modal('hide');
 			getStudentWithPage(currentPage);
 			getTotalPage();
 		},
-		error : function(xhr, status, error) {
-			if(xhr.responseJSON.errors.length > 0){
+		error: function (xhr, status, error) {
+			if (xhr.responseJSON.errors.length > 0) {
 				addErrorMessage(xhr.responseJSON.errors);
-			}else{
+			} else {
 				console.log(xhr.responseJSON.error);
 			}
 		}
@@ -280,53 +324,51 @@ function insertStudent(data) {
 
 // Bind error to view
 function addErrorMessage(errors) {
-	$.each(errors, function(index, value) {
-		if($("#error-" + value.field).text().length <=0){
+	$.each(errors, function (index, value) {
+		if ($("#error-" + value.field).text().length <= 0) {
 			$("#error-" + value.field).append("<p>" + value.defaultMessage + "</p>");
 			$("#error-" + value.field).removeClass("alert-hide");
 		}
 	});
 }
 
-function showDeleteStudentInfo(userId){
+function showDeleteStudentInfo(userId) {
 	currentStudentId = userId;
 }
 
 // Delete user info with parameter id
 function deleteStudentInfo() {
 	$.ajax({
-		type : "DELETE",
-		headers : {
-			'Authorization' : token
+		type: "DELETE",
+		headers: {
+			'Authorization': token
 		},
-		url : "/api/student/deleteStudent?id=" + currentStudentId,
-		success : function(reponse) {
+		url: "/api/student/deleteStudent?id=" + currentStudentId,
+		success: function (reponse) {
 			$("#data-student tbody").html("");
 			$('#modalDelete').modal('hide');
-			getStudentWithPage(currentPage);
 			getTotalPage();
+			getStudentWithPage(currentPage);
 		}
 	});
 }
 
-function clearForm(){
+function clearForm() {
 	$("#name").val("");
 	$("#code").val("");
 	$("#dateOfBirth").val("");
 	$("#averageScore").val("");
 	$("#address").val("");
 	currentStudentId = -1;
-	$('.error-message').each(function( index ) {
+	$('.error-message').each(function (index) {
 		$(this).empty();
 		$(this).addClass('alert-hide');
 	});
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 	updateCss();
-	getTotalPage();
-	getStudentWithPage(currentPage);
+	if (getTotalPage(0)) {
+		getStudentWithPage(currentPage);
+	}
 });
-
-
-

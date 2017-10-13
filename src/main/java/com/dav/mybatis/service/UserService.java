@@ -16,4 +16,7 @@ public interface UserService {
 	 * @throws Exception the exception
 	 */
 	User getUserByUsername(String username) throws Exception;
+
+
+	void save(User user) throws Exception;
 }
